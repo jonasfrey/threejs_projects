@@ -5,17 +5,16 @@ import { PointerLockControls } from './node_modules/three/examples/jsm/controls/
 // import { TextureLoader } from './node_modules/three/examples/jsm/loaders/TextureLoader.js'
 import { FontLoader } from './node_modules/three/examples/jsm/loaders/FontLoader.js'
 import "./cdn/math_tau.module.js";
-import o_app_css_variables2 from "./app_css_variables/app_css_variables.js";
+import o_app_css_variables_dynamic from "./app_css_variables/app_css_variables.mjs";
+import o_app_css_variables_static from "./app_css_variables/app_css.mjs";
 import o_hidstatusmap from "./cdn/o_hidstatusmap.module.js";
-
-window.o_app_css_variables2= o_app_css_variables2
-
+import o_app_css_variables from './app_css_variables/app_css.mjs'
 
 var o_stats = new Stats();
 o_stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(o_stats.dom);
 
-var o_scene = new THREE.Scene();
+var o_scene = new THREE.Scene();    
 var o_camera = new THREE.PerspectiveCamera(50, 500 / 400, 0.1, 1000);
 window.o_camera = o_camera
 var n_camera_movement_speed = 0.02;
@@ -23,16 +22,17 @@ o_camera.position.z = 5
 var o_renderer = new THREE.WebGLRenderer();
 o_renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(o_renderer.domElement);
-var o_geometry, o_material, o_mesh; 
+var o_geometry, o_material, o_mesh;
 
 const o_default_basic_material = new THREE.MeshBasicMaterial(
     {
-        color: new THREE.Color(o_app_css_variables2.s_color_background_main_passive),
+        color: new THREE.Color(o_app_css_variables_static.s_color_background_main_passive),
         transparent: true,
         wireframe: true, 
         opacity: 0.5,
     }
 )
+
 const o_default_line_material = new THREE.LineBasicMaterial(
     {
         color: 0xffffff,
@@ -63,7 +63,7 @@ o_geometry = new THREE.CylinderGeometry(
     1, 
     1
     );
-o_material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+o_material = o_default_basic_material
 const o_mesh_gun = new THREE.Mesh( o_geometry, o_material );
 o_scene.add( o_mesh_gun );
 

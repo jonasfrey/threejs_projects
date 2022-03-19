@@ -24,17 +24,20 @@ const o_computed_css_style = getComputedStyle(document.documentElement);
 
 
 // fetch request
-const o_app_css_variables2 = fetch('./../app.css') // fetch is the new XMLHttpRequest
+const o_app_css_variables_dynamic = fetch('./../app.css') // fetch is the new XMLHttpRequest
     .then(function(o_response){
         let s_response_text_promise = o_response.text();
-        return s_response_text_promise.then(function(s_response_text){
-            // console.log(result)
-            var res = f_o_extract_css_variables_from_string(s_response_text)
-            // console.log(res)
-            return res
-        }, function(error){
-            console.error('test')
-        })
+        return s_response_text_promise.then(
+            function(s_response_text){
+                // console.log(result)
+                var res = f_o_extract_css_variables_from_string(s_response_text)
+                // console.log(res)
+                return res
+            },
+            function(error){
+                console.error('test')
+            }
+        )
         console.log(s_response_text_promise)
   });
 
@@ -80,9 +83,24 @@ var f_o_extract_css_variables_from_string = function(s_string){
             
         }
 
-        return o_variables
+        console.log("asdf");
+
+
+        return fetch(
+            "/app_css_json",
+            {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(o_variables)    
+            }
+        ).then(o_response => {
+            console.log("Request complete! o_response:", o_response);
+            return o_variables
+        });
+        
+        // return o_variables
 
 
     }
 }
-export default await o_app_css_variables2;
+export default await o_app_css_variables_dynamic;
