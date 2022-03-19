@@ -50,6 +50,7 @@ const o_default_phong_material = new THREE.MeshPhongMaterial(
 )
 
 o_geometry = new THREE.BoxGeometry( 1, 1, 1 );
+var o_group = new THREE.Group(); 
 o_material = o_default_basic_material
 o_mesh = new THREE.Mesh( o_geometry, o_material );
 o_scene.add( o_mesh );
