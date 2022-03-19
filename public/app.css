@@ -1,0 +1,49 @@
+/* variables_start */
+:root{
+
+    --s_color_white_passive: rgba(243, 243, 243, 0.82);
+    --s_color_white_active: rgba(243, 243, 243, 0.95);
+
+    --s_color_red_passive: rgba(243, 42, 0, 0.7);
+    --s_color_red_active: rgba(243, 42, 0, 0.9);
+
+    --s_color_green_passive: rgba(42, 243, 0, 0.7);
+    --s_color_green_active: rgba(42, 243, 0, 0.9);
+
+    --s_color_blue_passive: rgba(0, 123, 243, 0.7);
+    --s_color_blue_active: rgba(0, 123, 243, 0.9);
+
+    --s_color_background_main_passive: var(--s_color_red_passive);
+    --s_color_background_main_active: var(--s_color_red_active);
+
+    --s_color_foreground_main_passive: var(--s_color_white_passive);
+    --s_color_foreground_main_active: var(--s_color_white_active);
+
+
+    --n_padding: 0.5rem
+}
+/* variables_end */
+
+*{
+    border:none;
+    font-family: Helvetica, sans-serif !important;
+}
+
+button{
+    background-color: var(--s_color_background_main_passive);
+    color: var(--s_color_foreground_main_passive);
+    padding: var(--n_padding);
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: var(--s_color_background_main_active);
+    color: var(--s_color_foreground_main_active);
+    padding: var(--n_padding);
+}
+a{
+    color: var(--s_color_blue_passive)
+}
+a:hover{
+    color: var(--s_color_blue_active)
+}

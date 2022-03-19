@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel="stylesheet" href="app.css">
         <meta charset="utf-8" />
         <title>Three.js Tutorials by Sean Bradley : https://sbcode.net/threejs/</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,24 +11,134 @@
                 margin: 0px;
             }
         </style>
-
-        <!-- Import maps polyfill -->
-        <!-- Remove this when import maps will be widely supported -->
-        <script
-            async
-            src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
-        ></script>
-
-        <script type="importmap">
-            {
-                "imports": {
-                    "three": "./build/three.module.js"
-                }
+        <style>
+            .demolinks{
+                position: absolute;
+                top: 0%;
+                left: 50%;
+                z-index: 1;
+                display: flex;
+                background: rgba(0,0,0,0.5);
+                color: white !important;
+                display: flex;
+                flex-direction: column;
             }
-        </script>
+            .demolinks div{
+                padding: 0.5rem; 
+                display: none;                
+                /* display: flex; */
+                flex-direction: column;
+            }
+        </style>
+    
+           <!-- Import maps polyfill -->
+            <!-- Remove this when import maps will be widely supported -->
+            <script
+                async
+                src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+            ></script>
+            
+            <!-- needed by the node_modules/three library -->
+            <script type="importmap">
+                {
+                    "imports": {
+                        "three": "./node_modules/three/build/three.module.js"
+                    }
+                }
+            </script>
     </head>
 
     <body>
-        <script type="module" src="client.js"></script>
+        <script type="module">
+
+            var s_module_name = window.location.hash.replace("#", "");
+            
+            var s_module_relative_url = "./"+s_module_name+".js"
+            var s_module_relative_url_default_fallback = "./default.js"
+            var o_xml_httprequest = new XMLHttpRequest(); 
+            o_xml_httprequest.open(
+                'GET',
+                s_module_relative_url
+            ); 
+            o_xml_httprequest.onload = function(){
+                if(this.status != 200){
+                    f_import_module(s_module_relative_url_default_fallback)
+                }else{
+                    f_import_module(s_module_relative_url)
+                }
+            }
+
+            o_xml_httprequest.send()
+
+            var f_import_module = function(s_module_relative_url){
+                import(
+                    s_module_relative_url
+                )
+            }
+            
+
+            // try {
+            //     import(
+            //     )
+            // } catch (error) {
+            //     // fallback/default module
+            //     // s_module_name = "index.js"
+            //     import(
+            //         "./simplecube.js"
+            //     )
+            // }
+
+            var o_xml_httprequest = new XMLHttpRequest();
+
+            o_xml_httprequest.open(
+                'GET',
+                "/available_modules"
+            ); 
+            var a_available_js_modules = []
+            
+            o_xml_httprequest.onload = function(){
+                if(this.status == 200){
+                    // debugger
+                    var o_demo_links_container = document.createElement("div"); 
+                    var o_demo_links_container_toggle = document.createElement("button");
+                    o_demo_links_container_toggle.innerText = "all Demo's"
+                    var o_demo_links_container_links_container = document.createElement("div")
+                    o_demo_links_container.className = "demolinks"
+
+                    o_demo_links_container.appendChild(o_demo_links_container_toggle)
+                    o_demo_links_container.appendChild(o_demo_links_container_links_container)
+                    o_demo_links_container_links_container.data_display = false; 
+
+                    a_available_js_modules = JSON.parse(this.responseText)
+                    for(var n_a_available_js_modules_key in a_available_js_modules){
+                        var s_available_module = a_available_js_modules[n_a_available_js_modules_key];
+                        var o_link = document.createElement("a")
+                        o_link.href = window.location.origin +"#"+s_available_module.split(".").shift()
+                        o_link.onclick = function(){
+                            window.setTimeout(function(){
+                                location.reload();
+                            },10)
+                        }
+                        o_link.innerText = s_available_module.split(".").shift()
+                        o_demo_links_container_links_container.appendChild(o_link)
+                    }
+
+                    o_demo_links_container_toggle.onclick = function(){
+                        o_demo_links_container_links_container.data_display = !o_demo_links_container_links_container.data_display
+
+                        o_demo_links_container_links_container.style.display = (
+                            o_demo_links_container_links_container.data_display
+                        ) ? "flex" : "none"
+                    }
+                    document.body.appendChild(o_demo_links_container)
+
+                }
+            }
+
+            o_xml_httprequest.send()
+
+
+        </script>
+
     </body>
 </html>
