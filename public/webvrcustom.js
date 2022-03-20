@@ -1,10 +1,12 @@
+// import * as THREE from 'three';
+// import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
+// import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
+
 import * as THREE from 'three'
 import Stats from './node_modules/three/examples/jsm/libs/stats.module.js'
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
 import { GUI } from './node_modules/three/examples/jsm/libs/lil-gui.module.min.js'
 import { PointerLockControls } from './node_modules/three/examples/jsm/controls/PointerLockControls.js'
-// import { TextureLoader } from './node_modules/three/examples/jsm/loaders/TextureLoader.js'
-// import { FontLoader } from './node_modules/three/examples/jsm/loaders/FontLoader.js'
 import "math_tau_module";
 import o_app_css_variables_dynamic from "./app_css_variables/app_css_variables.mjs";
 import o_app_css_variables_static from "./app_css_variables/app_css.mjs";
@@ -13,8 +15,6 @@ import o_app_css_variables from './app_css_variables/app_css.mjs'
 import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
 
 
-const o_texture_loader = new THREE.TextureLoader();
-// const o_font_loader = new THREE.FontLoader()
 
 var o_stats = new Stats();
 o_stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -41,34 +41,33 @@ o_renderer.xr.enabled = true;
 document.body.appendChild(o_renderer.domElement);
 document.body.appendChild( VRButton.createButton( o_renderer ) );
 
-const floorGeometry = new THREE.PlaneGeometry( 4, 4 );
-const floorMaterial = new THREE.MeshStandardMaterial( {
-    color: 0xeeeeee,
-    roughness: 1.0,
-    metalness: 0.0
-} );
-const floor = new THREE.Mesh( floorGeometry, floorMaterial );
-floor.rotation.x = - Math.PI / 2;
-floor.receiveShadow = true;
-o_scene.add( floor );
-
-o_scene.add( new THREE.HemisphereLight( 0x808080, 0x606060 ) );
-
-const light = new THREE.DirectionalLight( 0xffffff );
-light.position.set( 0, 6, 0 );
-light.castShadow = true;
-light.shadow.camera.top = 2;
-light.shadow.camera.bottom = - 2;
-light.shadow.camera.right = 2;
-light.shadow.camera.left = - 2;
-light.shadow.mapSize.set( 4096, 4096 );
-o_scene.add( light );
-
-
-
-
+///
+const o_texture_loader = new THREE.TextureLoader();
 var o_geometry, o_material, o_mesh;
+///
 
+
+///
+var b_callbacks_done = false
+var n_callback_counter = 0
+var f_callbacks_done = function(){
+    b_callbacks_done = true; 
+    // debugger
+    o_scene.traverse( function( object ) {
+        if ( object.isMesh ){
+            if(object?.name?.includes("font")){
+                a_font_meshes.push(object)
+            }
+            if(object.o_planet){
+                a_planet_meshes.push(object)
+            }
+        }
+
+    } );
+}
+///
+
+///
 const o_default_basic_material = new THREE.MeshBasicMaterial(
     {
         color: new THREE.Color(o_app_css_variables_static.s_color_background_main_passive),
@@ -93,9 +92,11 @@ const o_default_phong_material = new THREE.MeshPhongMaterial(
         flatShading: true,
     }
 )
+///
 
 
-
+///
+n_callback_counter++
 o_texture_loader.load(
     "./images/Milky_Way_360_equirectangular_rendering_with_foreground_stars_removed.jpg",
     function (
@@ -129,15 +130,18 @@ o_texture_loader.load(
         o_mesh = new THREE.Mesh( o_geometry, o_default_basic_material );
         o_mesh.rotation.x = Math.PI /2 
         o_scene.add( o_mesh );
+        n_callback_counter--
 
 } );
 
+///
 
-// the
+///
 var o_vec3_o_raycaster_mesh_universe_point = new THREE.Vector3(0,0,0)
+///
 
 
-//right hand
+///
 var o_geometry = new THREE.CylinderGeometry( 
     0,
     0.5,
@@ -181,32 +185,20 @@ o_mesh_right_hand.f_render_function = function(){
     self.quaternion.setFromUnitVectors(axis, o_vec3_o_raycaster_mesh_universe_point.clone().normalize());
 
 }
+/// 
 
 
-
-var pointLight = new THREE.PointLight( 0xffffff,1 );
-pointLight.position.set( 0, 0, 3 );
-o_scene.add( pointLight );
-
-var b_callbacks_done = false
-var n_callback_counter = 0
-
-var f_callbacks_done = function(){
-    b_callbacks_done = true; 
-    // debugger
-    o_scene.traverse( function( object ) {
-        if ( object.isMesh ){
-            if(object?.name?.includes("font")){
-                a_font_meshes.push(object)
-            }
-            if(object.o_planet){
-                a_planet_meshes.push(object)
-            }
-        }
-
-    } );
+///
+window.addEventListener( 'resize', onWindowResize );
+function onWindowResize() {
+    o_camera.aspect = window.innerWidth / window.innerHeight;
+    o_camera.updateProjectionMatrix();
+    o_renderer.setSize( window.innerWidth, window.innerHeight );
 }
+///
 
+
+///
 const o_pointerlock_controls = new PointerLockControls( 
     o_camera,
     document.body
@@ -237,23 +229,12 @@ o_pointerlock_controls.addEventListener( 'unlock', function () {
 } );
 
 o_button_pointer_lock.addEventListener("click", f_lock_pointer) 
+///
 
 
 
-// the frame id should always stay positivte infinitly incrementing integer 
-var n_frame_id = 0;
-// the time, can be changed to go slower/faster/backwards
-var n_time = 0;
-// can be changed to -1 to, change from forwards to backwards
-var n_time_summand = 1;
-// window.o_scene = o_scene
-
-
+///
 const raycaster = new THREE.Raycaster();
-
-
-// const o_line_raycaster_ray = await import('./es6_modules/o_line_raycaster_ray.js')
-
 const o_material_raycaster_ray = new THREE.LineBasicMaterial({
 	color: 0x0000ff
 });
@@ -265,10 +246,16 @@ const o_geometry_raycaster_ray = new THREE.BufferGeometry().setFromPoints(
 );
 const o_line_raycaster_ray = new THREE.Line( o_geometry_raycaster_ray, o_material_raycaster_ray );
 o_scene.add( o_line_raycaster_ray ); 
+///
 
-// import('./es6_modules/o_line_raycaster_ray.js')
-// import o_line_raycaster_ray from './es6_modules/o_line_raycaster_ray.js'
-
+///
+// the frame id should always stay positivte infinitly incrementing integer 
+var n_frame_id = 0;
+// the time, can be changed to go slower/faster/backwards
+var n_time = 0;
+// can be changed to -1 to, change from forwards to backwards
+var n_time_summand = 1;
+// window.o_scene = o_scene
 var f_render = function () {
 
     raycaster.setFromCamera( 
@@ -364,17 +351,6 @@ var f_render = function () {
 
     n_time += n_time_summand
     n_frame_id = requestAnimationFrame(f_render);
-    
 };
-
 f_render();
-
-window.addEventListener(
-    "resize",
-    function () {
-        o_camera.aspect = window.innerWidth / window.innerHeight;
-        o_camera.updateProjectionMatrix();
-        o_renderer.setSize( window.innerWidth, window.innerHeight );
-    },
-    false
-);
+///
