@@ -41,6 +41,24 @@ o_renderer.xr.enabled = true;
 document.body.appendChild(o_renderer.domElement);
 document.body.appendChild( VRButton.createButton( o_renderer ) );
 
+
+
+///
+o_scene.add( new THREE.HemisphereLight( 0x808080, 0x606060 ) );
+
+const light = new THREE.DirectionalLight( 0xffffff );
+light.position.set( 0, 6, 0 );
+light.castShadow = true;
+light.shadow.camera.top = 2;
+light.shadow.camera.bottom = - 2;
+light.shadow.camera.right = 2;
+light.shadow.camera.left = - 2;
+light.shadow.mapSize.set( 4096, 4096 );
+o_scene.add( light );
+///
+
+
+
 ///
 const o_texture_loader = new THREE.TextureLoader();
 var o_geometry, o_material, o_mesh;
