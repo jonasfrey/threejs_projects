@@ -54,8 +54,13 @@ light.shadow.mapSize.set( 4096, 4096 );
 o_scene.add( light );
 
 var n_camera_movement_speed = 0.02;
-var o_renderer = new THREE.WebGLRenderer();
+var o_renderer = new THREE.WebGLRenderer({ antialias: true });
 o_renderer.setSize(window.innerWidth, window.innerHeight);
+
+o_renderer.setPixelRatio( window.devicePixelRatio );
+o_renderer.outputEncoding = THREE.sRGBEncoding;
+o_renderer.shadowMap.enabled = true;
+o_renderer.xr.enabled = true;
 document.body.appendChild(o_renderer.domElement);
 document.body.appendChild( VRButton.createButton( o_renderer ) );
 
