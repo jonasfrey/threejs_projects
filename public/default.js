@@ -56,6 +56,27 @@ const o_default_phong_material = new THREE.MeshPhongMaterial(
     }
 )
 
+controller1 = renderer.xr.getController( 0 );
+controller1.addEventListener( 'selectstart', onSelectStart );
+controller1.addEventListener( 'selectend', onSelectEnd );
+scene.add( controller1 );
+
+controller2 = renderer.xr.getController( 1 );
+controller2.addEventListener( 'selectstart', onSelectStart );
+controller2.addEventListener( 'selectend', onSelectEnd );
+scene.add( controller2 );
+
+const controllerModelFactory = new XRControllerModelFactory();
+
+controllerGrip1 = renderer.xr.getControllerGrip( 0 );
+controllerGrip1.add( controllerModelFactory.createControllerModel( controllerGrip1 ) );
+scene.add( controllerGrip1 );
+
+controllerGrip2 = renderer.xr.getControllerGrip( 1 );
+controllerGrip2.add( controllerModelFactory.createControllerModel( controllerGrip2 ) );
+scene.add( controllerGrip2 );
+
+
 o_texture_loader.load(
     "./images/Milky_Way_360_equirectangular_rendering_with_foreground_stars_removed.jpg",
     function (
