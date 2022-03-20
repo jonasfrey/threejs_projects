@@ -199,36 +199,36 @@ function onWindowResize() {
 
 
 ///
-const o_pointerlock_controls = new PointerLockControls( 
-    o_camera,
-    document.body
-);
+// const o_pointerlock_controls = new PointerLockControls( 
+//     o_camera,
+//     document.body
+// );
 
-var o_button_pointer_lock = document.createElement("button")
-o_button_pointer_lock.innerText = 'look around'
-o_button_pointer_lock.style.position = 'absolute'
-o_button_pointer_lock.style.bottom = '0%'
-o_button_pointer_lock.style.right = '0%'
+// var o_button_pointer_lock = document.createElement("button")
+// o_button_pointer_lock.innerText = 'look around'
+// o_button_pointer_lock.style.position = 'absolute'
+// o_button_pointer_lock.style.bottom = '0%'
+// o_button_pointer_lock.style.right = '0%'
 
-document.body.appendChild(o_button_pointer_lock)
-var f_lock_pointer = function () {
-    o_pointerlock_controls.lock();
-}
-o_pointerlock_controls.addEventListener( 'lock', function () {
-        // o_mesh_gun.visible = true
-        o_hidstatusmap.o_mouse.x_normalized = 0.5        
-        o_hidstatusmap.o_mouse.y_normalized = 0.5
-    o_button_pointer_lock.innerText = 'MOUSEMOVE to look around,\n W A S D to move,\n E Q to rise/sink,\n ESC to unlock pointer'
-} );
+// document.body.appendChild(o_button_pointer_lock)
+// var f_lock_pointer = function () {
+//     o_pointerlock_controls.lock();
+// }
+// o_pointerlock_controls.addEventListener( 'lock', function () {
+//         // o_mesh_gun.visible = true
+//         o_hidstatusmap.o_mouse.x_normalized = 0.5        
+//         o_hidstatusmap.o_mouse.y_normalized = 0.5
+//     o_button_pointer_lock.innerText = 'MOUSEMOVE to look around,\n W A S D to move,\n E Q to rise/sink,\n ESC to unlock pointer'
+// } );
 
-o_pointerlock_controls.addEventListener( 'unlock', function () {
-        // o_mesh_gun.visible = false
-        o_hidstatusmap.o_mouse.x_normalized = 0.5        
-        o_hidstatusmap.o_mouse.y_normalized = 0.5
-        o_button_pointer_lock.innerText = 'look around'
-} );
+// o_pointerlock_controls.addEventListener( 'unlock', function () {
+//         // o_mesh_gun.visible = false
+//         o_hidstatusmap.o_mouse.x_normalized = 0.5        
+//         o_hidstatusmap.o_mouse.y_normalized = 0.5
+//         o_button_pointer_lock.innerText = 'look around'
+// } );
 
-o_button_pointer_lock.addEventListener("click", f_lock_pointer) 
+// o_button_pointer_lock.addEventListener("click", f_lock_pointer) 
 ///
 
 
@@ -301,15 +301,7 @@ var f_render = function () {
     // debugger
     // o_geometry_cylinder.position.copy(vec)
 
-    if(o_pointerlock_controls.isLocked){
-        // o_mesh_gun.position.x = o_camera.position.x
-        // o_mesh_gun.position.y = o_camera.position.y
-        // o_mesh_gun.position.z = o_camera.position.z -2
 
-        // o_mesh_gun.lookAt(
-        //     new THREE.Vector3(0,0,0)
-        // )
-    }
 
     o_stats.begin();
 
@@ -323,18 +315,18 @@ var f_render = function () {
 
     // console.log(a_font_meshes)
 
-    if(o_hidstatusmap["w"] == true){
-        o_pointerlock_controls.moveForward(n_camera_movement_speed)
-    }
-    if(o_hidstatusmap["s"] == true){
-        o_pointerlock_controls.moveForward(-n_camera_movement_speed)
-    }
-    if(o_hidstatusmap["a"] == true){
-        o_pointerlock_controls.moveRight(-n_camera_movement_speed)
-    }
-    if(o_hidstatusmap["d"] == true){
-        o_pointerlock_controls.moveRight(n_camera_movement_speed)
-    }
+    // if(o_hidstatusmap["w"] == true){
+    //     o_pointerlock_controls.moveForward(n_camera_movement_speed)
+    // }
+    // if(o_hidstatusmap["s"] == true){
+    //     o_pointerlock_controls.moveForward(-n_camera_movement_speed)
+    // }
+    // if(o_hidstatusmap["a"] == true){
+    //     o_pointerlock_controls.moveRight(-n_camera_movement_speed)
+    // }
+    // if(o_hidstatusmap["d"] == true){
+    //     o_pointerlock_controls.moveRight(n_camera_movement_speed)
+    // }
     if(o_hidstatusmap["e"] == true){
         o_camera.position.y += (n_camera_movement_speed)
     }
