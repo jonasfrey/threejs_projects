@@ -57,7 +57,7 @@ const o_default_phong_material = new THREE.MeshPhongMaterial(
 )
 
 o_texture_loader.load(
-    "./images/Milky_Way_360_equirectangular_rendering_with_foreground_stars_removed.png",
+    "./images/Milky_Way_360_equirectangular_rendering_with_foreground_stars_removed.jpg",
     function (
         o_texture
         ) {
