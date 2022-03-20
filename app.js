@@ -18,6 +18,7 @@ http_app.get("*", (req, res)=>{
 
     if(req.protocol !== 'https'){
         res.redirect('https://' + a_parts.shift()+":"+n_port_https + req.url);
+        res.end();
     }
 
 })
