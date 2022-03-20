@@ -23,6 +23,8 @@
   "homepage": "https://github.com/Sean-Bradley/Threejs-Boilerplate#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "math_tau_module": "^1.0.3",
+    "o_hidstatusmap": "^1.0.0",
     "three": "^0.137.5"
   }
 }

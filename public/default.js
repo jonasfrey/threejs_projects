@@ -4,10 +4,10 @@ import { GUI } from './node_modules/three/examples/jsm/libs/lil-gui.module.min.j
 import { PointerLockControls } from './node_modules/three/examples/jsm/controls/PointerLockControls.js'
 // import { TextureLoader } from './node_modules/three/examples/jsm/loaders/TextureLoader.js'
 import { FontLoader } from './node_modules/three/examples/jsm/loaders/FontLoader.js'
-import "./cdn/math_tau.module.js";
+import "math_tau_module";
 import o_app_css_variables_dynamic from "./app_css_variables/app_css_variables.mjs";
 import o_app_css_variables_static from "./app_css_variables/app_css.mjs";
-import o_hidstatusmap from "./cdn/o_hidstatusmap.module.js";
+import o_hidstatusmap from "o_hidstatusmap";
 import o_app_css_variables from './app_css_variables/app_css.mjs'
 import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
 
@@ -184,15 +184,15 @@ var f_lock_pointer = function () {
 }
 o_pointerlock_controls.addEventListener( 'lock', function () {
         // o_mesh_gun.visible = true
-        o_hidstatusmap.mouse.x_normalized = 0.5        
-        o_hidstatusmap.mouse.y_normalized = 0.5
+        o_hidstatusmap.o_mouse.x_normalized = 0.5        
+        o_hidstatusmap.o_mouse.y_normalized = 0.5
     o_button_pointer_lock.innerText = 'MOUSEMOVE to look around,\n W A S D to move,\n E Q to rise/sink,\n ESC to unlock pointer'
 } );
 
 o_pointerlock_controls.addEventListener( 'unlock', function () {
         // o_mesh_gun.visible = false
-        o_hidstatusmap.mouse.x_normalized = 0.5        
-        o_hidstatusmap.mouse.y_normalized = 0.5
+        o_hidstatusmap.o_mouse.x_normalized = 0.5        
+        o_hidstatusmap.o_mouse.y_normalized = 0.5
         o_button_pointer_lock.innerText = 'look around'
 } );
 
@@ -234,8 +234,8 @@ var f_render = function () {
 
     raycaster.setFromCamera( 
         {
-            x: o_hidstatusmap.mouse.x_normalized * 2 - 1, 
-            y: - o_hidstatusmap.mouse.y_normalized * 2 + 1, 
+            x: o_hidstatusmap.o_mouse.x_normalized * 2 - 1, 
+            y: - o_hidstatusmap.o_mouse.y_normalized * 2 + 1, 
         },
         o_camera
     );
