@@ -396,7 +396,17 @@ var f_render = function () {
     o_stats.end();
 
     n_time += n_time_summand
-    n_frame_id = requestAnimationFrame(f_render);
+    
+    // requestAnimationFrame not working for VR 
+    // n_frame_id = requestAnimationFrame(f_render);
+    n_frame_id++
 };
-f_render();
+
+var f_render_for_vr = function(){
+
+    o_renderer.setAnimationLoop( f_render );
+
+}
+
+f_render_for_vr();
 ///
