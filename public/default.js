@@ -1,9 +1,10 @@
 import * as THREE from 'three'
 import Stats from './node_modules/three/examples/jsm/libs/stats.module.js'
+import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
 import { GUI } from './node_modules/three/examples/jsm/libs/lil-gui.module.min.js'
 import { PointerLockControls } from './node_modules/three/examples/jsm/controls/PointerLockControls.js'
 // import { TextureLoader } from './node_modules/three/examples/jsm/loaders/TextureLoader.js'
-import { FontLoader } from './node_modules/three/examples/jsm/loaders/FontLoader.js'
+// import { FontLoader } from './node_modules/three/examples/jsm/loaders/FontLoader.js'
 import "math_tau_module";
 import o_app_css_variables_dynamic from "./app_css_variables/app_css_variables.mjs";
 import o_app_css_variables_static from "./app_css_variables/app_css.mjs";
@@ -13,7 +14,7 @@ import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
 
 
 const o_texture_loader = new THREE.TextureLoader();
-const o_font_loader = new THREE.FontLoader()
+// const o_font_loader = new THREE.FontLoader()
 
 var o_stats = new Stats();
 o_stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -23,6 +24,11 @@ var o_scene = new THREE.Scene();
 var o_camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 10 );
 //important for VR
 o_camera.position.set( 0, 1.6, 3 );
+
+var o_orbit_controls = new OrbitControls( o_camera, document.body );
+o_orbit_controls.target.set( 0, 1.6, 0 );
+o_orbit_controls.update();
+
 var n_camera_movement_speed = 0.02;
 var o_renderer = new THREE.WebGLRenderer();
 o_renderer.setSize(window.innerWidth, window.innerHeight);
@@ -56,25 +62,6 @@ const o_default_phong_material = new THREE.MeshPhongMaterial(
     }
 )
 
-controller1 = renderer.xr.getController( 0 );
-controller1.addEventListener( 'selectstart', onSelectStart );
-controller1.addEventListener( 'selectend', onSelectEnd );
-scene.add( controller1 );
-
-controller2 = renderer.xr.getController( 1 );
-controller2.addEventListener( 'selectstart', onSelectStart );
-controller2.addEventListener( 'selectend', onSelectEnd );
-scene.add( controller2 );
-
-const controllerModelFactory = new XRControllerModelFactory();
-
-controllerGrip1 = renderer.xr.getControllerGrip( 0 );
-controllerGrip1.add( controllerModelFactory.createControllerModel( controllerGrip1 ) );
-scene.add( controllerGrip1 );
-
-controllerGrip2 = renderer.xr.getControllerGrip( 1 );
-controllerGrip2.add( controllerModelFactory.createControllerModel( controllerGrip2 ) );
-scene.add( controllerGrip2 );
 
 
 o_texture_loader.load(
