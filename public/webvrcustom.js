@@ -5,13 +5,9 @@
 import * as THREE from 'three'
 import Stats from './node_modules/three/examples/jsm/libs/stats.module.js'
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
-import { GUI } from './node_modules/three/examples/jsm/libs/lil-gui.module.min.js'
-import { PointerLockControls } from './node_modules/three/examples/jsm/controls/PointerLockControls.js'
 import "math_tau_module";
-import o_app_css_variables_dynamic from "./app_css_variables/app_css_variables.mjs";
 import o_app_css_variables_static from "./app_css_variables/app_css.mjs";
 import o_hidstatusmap from "o_hidstatusmap";
-import o_app_css_variables from './app_css_variables/app_css.mjs'
 import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
 
 
@@ -42,6 +38,46 @@ document.body.appendChild(o_renderer.domElement);
 document.body.appendChild( VRButton.createButton( o_renderer ) );
 
 
+///
+var group = new THREE.Group();
+o_scene.add( group );
+
+const geometries = [
+    new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
+    new THREE.ConeGeometry( 0.2, 0.2, 64 ),
+    new THREE.CylinderGeometry( 0.2, 0.2, 0.2, 64 ),
+    new THREE.IcosahedronGeometry( 0.2, 8 ),
+    new THREE.TorusGeometry( 0.2, 0.04, 64, 32 )
+];
+
+for ( let i = 0; i < 50; i ++ ) {
+
+    const geometry = geometries[ Math.floor( Math.random() * geometries.length ) ];
+    const material = new THREE.MeshStandardMaterial( {
+        color: Math.random() * 0xffffff,
+        roughness: 0.7,
+        metalness: 0.0
+    } );
+
+    const object = new THREE.Mesh( geometry, material );
+
+    object.position.x = Math.random() * 4 - 2;
+    object.position.y = Math.random() * 2;
+    object.position.z = Math.random() * 4 - 2;
+
+    object.rotation.x = Math.random() * 2 * Math.PI;
+    object.rotation.y = Math.random() * 2 * Math.PI;
+    object.rotation.z = Math.random() * 2 * Math.PI;
+
+    object.scale.setScalar( Math.random() + 0.5 );
+
+    object.castShadow = true;
+    object.receiveShadow = true;
+
+    group.add( object );
+
+}
+///
 
 ///
 o_scene.add( new THREE.HemisphereLight( 0x808080, 0x606060 ) );
