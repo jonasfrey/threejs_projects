@@ -518,18 +518,23 @@ window.onclick = function(){ b_toggle = !b_toggle}
 var f_render = function (param_a, param_b) {
     if(b_toggle){
         if(n_frame_id % 50 == 0){
-            console.log(
-                "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
-                o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
-            )
-            ui_console.log(
-                "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
-                o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
-            )
-            ui_console.log(
-                "click on the screen to stop logging on frame render", 
-                "click on the screen to stop logging on frame render"
-            )
+            try {
+                console.log(
+                    "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
+                    o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+                )
+                ui_console.log(
+                    "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
+                    o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+                )
+                ui_console.log(
+                    "click on the screen to stop logging on frame render", 
+                    "click on the screen to stop logging on frame render"
+                )
+            } catch (error) {
+                
+            }
+
         }
     }
     // console.log(navigator.xr.)
