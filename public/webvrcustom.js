@@ -342,14 +342,14 @@ o_renderer.xr.addEventListener( 'sessionstart', function ( event ) {
 
 } );
 
-const o_xr_session = renderer.xr.getSession();
+const o_xr_session = o_renderer.xr.getSession();
 
 
 // renderer.xr.onInputSourcesChange = function( event ) {
 
 o_renderer.xr.addEventListener( 'onInputSourcesChange', function ( event ) {
         
-    const inputSources = renderer.xr.getSession().inputSources;
+    const inputSources = o_renderer.xr.getSession().inputSources;
     
     ui_console.log(
         "onInputSourcesChange event", 
