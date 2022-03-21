@@ -39,6 +39,7 @@ o_camera.position.set( 0, 1.6, 3 );
 
 var n_camera_movement_speed = 0.02;
 var o_renderer = new THREE.WebGLRenderer({ antialias: true });
+window.o_renderer = o_renderer
 o_renderer.setPixelRatio( window.devicePixelRatio );
 o_renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -253,9 +254,7 @@ ui_console.log = function(s_name, object){
     this.innerText += s_name + "\n";
     this.innerText += "--------\n";
     this.innerText += JSON.stringify(object, null, 4)+"\n"
-    if(object){
-        this.innerText += objToString(object)+"\n"
-    }
+
     this.scrollTop = this.scrollHeight;
     html2canvas(this).then(o_canvas => {
         var o_texture = new THREE.CanvasTexture(o_canvas)
@@ -518,25 +517,22 @@ window.onclick = function(){ b_toggle = !b_toggle}
 // window.o_scene = o_scene
 var f_render = function (param_a, param_b) {
     if(b_toggle){
-        if(n_frame_id % 20 == 0){
-            if(o_renderer.xr.getSession()){
-                // Check for and respond to any gamepad state changes.
-                for (let source of o_renderer.xr.getSession()?.inputSources) {
-                    ui_console.log(
-                        "source", 
-                        source
-                    )
-                    if (source.gamepad) {
-                        ui_console.log(
-                            "source.gamepad", 
-                            source.gamepad
-                        )
-        
-                    }
-                }
-            }
+        if(n_frame_id % 50 == 0){
+            console.log(
+                "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
+                o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+            )
+            ui_console.log(
+                "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
+                o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+            )
+            ui_console.log(
+                "click on the screen to stop logging on frame render", 
+                "click on the screen to stop logging on frame render"
+            )
         }
     }
+    // console.log(navigator.xr.)
     // if(n_frame_id % 20 == 0){
     //     var time = param_a
     //     var frame = param_b
