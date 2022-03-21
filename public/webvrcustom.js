@@ -331,21 +331,18 @@ o_renderer.xr.addEventListener( 'sessionstart', function ( event ) {
 
 
     ui_console.log(
-        "o_vr_button", 
-        o_vr_button
-    )
-
-
-    ui_console.log(
         "o_renderer.xr", 
         o_renderer.xr
     )
 
 
     ui_console.log(
-        "o_xr_session", 
-        o_xr_session
+        "o_renderer.xr.getSession()", 
+        o_renderer.xr.getSession()
     )
+
+
+
 
 } );
 
@@ -508,6 +505,8 @@ window.onclick = function(){ b_toggle = !b_toggle}
 // window.o_scene = o_scene
 var f_render = function (param_a, param_b) {
     if(b_toggle){
+        if(n_frame_id % 20 == 0){
+
         // Check for and respond to any gamepad state changes.
         for (let source of o_renderer.xr.getSession()?.inputSources) {
             ui_console.log(
@@ -521,6 +520,7 @@ var f_render = function (param_a, param_b) {
                 )
 
             }
+        }
         }
     }
     // if(n_frame_id % 20 == 0){
