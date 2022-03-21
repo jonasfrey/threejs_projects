@@ -362,6 +362,37 @@ o_renderer.xr.addEventListener( 'onInputSourcesChange', function ( event ) {
     )
 });
 
+o_renderer.xr.getSession().addEventListener( 'onInputSourcesChange', function ( event ) {
+        
+    const inputSources = o_renderer.xr.getSession().inputSources;
+    
+    ui_console.log(
+        "onInputSourcesChange event", 
+        event
+    )
+
+    ui_console.log(
+        "onInputSourcesChange event", 
+        event
+    )
+});
+
+o_renderer.xr.getSession().addEventListener( 'inputSourcesChange', function ( event ) {
+        
+    const inputSources = o_renderer.xr.getSession().inputSources;
+    
+    ui_console.log(
+        "inputSourcesChange event", 
+        event
+    )
+
+    ui_console.log(
+        "inputSourcesChange event", 
+        event
+    )
+});
+
+
 ///
 
 ///
