@@ -279,16 +279,21 @@ var f_log_xr_event = function(event){
 }
 
 o_scene.add( controller1 );
-controller1.addEventListener( 'connected', f_log_xr_event);
-controller1.addEventListener( 'select', f_log_xr_event);
-controller1.addEventListener( 'selectend', f_log_xr_event);
-controller1.addEventListener( 'selectstart', f_log_xr_event);
+// controller1.addEventListener( 'connected', f_log_xr_event);
+// controller1.addEventListener( 'select', f_log_xr_event);
+// controller1.addEventListener( 'selectend', f_log_xr_event);
+// controller1.addEventListener( 'selectstart', f_log_xr_event);
+controller1.addEventListener( 'inputsourceschange', f_log_xr_event);
+
+// session.addEventListener( 'inputsourceschange', onInputSourcesChange );
 
 var controller2 = o_renderer.xr.getController( 1 );
-controller2.addEventListener( 'connected', f_log_xr_event);
-controller2.addEventListener( 'select', f_log_xr_event);
-controller2.addEventListener( 'selectend', f_log_xr_event);
-controller2.addEventListener( 'selectstart', f_log_xr_event);
+controller2.addEventListener( 'inputsourceschange', f_log_xr_event);
+
+// controller2.addEventListener( 'connected', f_log_xr_event);
+// controller2.addEventListener( 'select', f_log_xr_event);
+// controller2.addEventListener( 'selectend', f_log_xr_event);
+// controller2.addEventListener( 'selectstart', f_log_xr_event);
 
 
 o_scene.add( controller2 );
@@ -496,49 +501,50 @@ var n_time = 0;
 var n_time_summand = 1;
 // window.o_scene = o_scene
 var f_render = function (param_a, param_b) {
-    if(n_frame_id % 20 == 0){
-        var time = param_a
-        var frame = param_b
-        if(frame){
+
+    // if(n_frame_id % 20 == 0){
+    //     var time = param_a
+    //     var frame = param_b
+    //     if(frame){
 
         
-        // try {
-            let session = frame.session;
-            for (let source of session.inputSources) {
-                if (source.gamepad) {
+    //     // try {
+    //         let session = frame.session;
+    //         for (let source of session.inputSources) {
+    //             if (source.gamepad) {
 
-                    //let pose = frame.getPose(source.gripSpace, refSpace);
-                    ui_console.log(
-                        "gamepad.buttons", 
-                        gamepad.buttons
-                    )
-                    ui_console.log(
-                        "gamepad.buttons.length", 
-                        gamepad.buttons.length
-                    )
-                    ui_console.log(
-                        "gamepad.axes", 
-                        gamepad.axes
-                    )
-                }
-              }
-            }
-        // } catch (error) {
+    //                 //let pose = frame.getPose(source.gripSpace, refSpace);
+    //                 ui_console.log(
+    //                     "gamepad.buttons", 
+    //                     gamepad.buttons
+    //                 )
+    //                 ui_console.log(
+    //                     "gamepad.buttons.length", 
+    //                     gamepad.buttons.length
+    //                 )
+    //                 ui_console.log(
+    //                     "gamepad.axes", 
+    //                     gamepad.axes
+    //                 )
+    //             }
+    //           }
+    //         }
+    //     // } catch (error) {
             
-        // }
-        ui_console.log(
-            "f_render param_a", 
-            param_a
-        )
-        ui_console.log(
-            "f_render param_b", 
-            param_b
-        )
-        ui_console.log(
-            "o_renderer.xr.getSession()", 
-            o_renderer.xr.getSession()
-        )
-    }
+    //     // }
+    //     ui_console.log(
+    //         "f_render param_a", 
+    //         param_a
+    //     )
+    //     ui_console.log(
+    //         "f_render param_b", 
+    //         param_b
+    //     )
+    //     ui_console.log(
+    //         "o_renderer.xr.getSession()", 
+    //         o_renderer.xr.getSession()
+    //     )
+    // }
     raycaster.setFromCamera( 
         {
             x: o_hidstatusmap.o_mouse.x_normalized * 2 - 1, 
