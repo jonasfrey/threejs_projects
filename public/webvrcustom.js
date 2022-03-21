@@ -511,7 +511,7 @@ var n_time = 0;
 // can be changed to -1 to, change from forwards to backwards
 var n_time_summand = 1;
 
-var b_toggle = false 
+var b_toggle = true 
 
 window.onclick = function(){ b_toggle = !b_toggle}
 // window.o_scene = o_scene
