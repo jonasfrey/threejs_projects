@@ -314,6 +314,23 @@ o_renderer.xr.addEventListener( 'sessionstart', function ( event ) {
         event
     )
 
+    ui_console.log(
+        "navigator.xr", 
+        navigator.xr
+    )
+
+
+    ui_console.log(
+        "VRButton", 
+        VRButton
+    )
+
+
+    ui_console.log(
+        "o_renderer.xr", 
+        o_renderer.xr
+    )
+
 } );
 
 ///
