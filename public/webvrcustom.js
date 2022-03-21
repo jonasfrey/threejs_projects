@@ -15,6 +15,15 @@ import { XRControllerModelFactory } from './node_modules/three/examples/jsm/webx
 import html2canvas from 'html2canvas';
 import { TextureLoader } from 'three';
 
+function objToString (obj) {
+    var str = '';
+    for (var p in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, p)) {
+            str += p + '::' + obj[p] + '\n';
+        }
+    }
+    return str;
+}
 
 
 var o_stats = new Stats();
@@ -244,6 +253,9 @@ ui_console.log = function(s_name, object){
     this.innerText += s_name + "\n";
     this.innerText += "--------\n";
     this.innerText += JSON.stringify(object, null, 4)+"\n"
+    if(object){
+        this.innerText += objToString(object)+"\n"
+    }
     this.scrollTop = this.scrollHeight;
     html2canvas(this).then(o_canvas => {
         var o_texture = new THREE.CanvasTexture(o_canvas)
@@ -491,6 +503,7 @@ const o_line_raycaster_ray = new THREE.Line( o_geometry_raycaster_ray, o_materia
 o_scene.add( o_line_raycaster_ray ); 
 ///
 
+
 ///
 // the frame id should always stay positivte infinitly incrementing integer 
 var n_frame_id = 0;
@@ -506,21 +519,22 @@ window.onclick = function(){ b_toggle = !b_toggle}
 var f_render = function (param_a, param_b) {
     if(b_toggle){
         if(n_frame_id % 20 == 0){
-
-        // Check for and respond to any gamepad state changes.
-        for (let source of o_renderer.xr.getSession()?.inputSources) {
-            ui_console.log(
-                "source", 
-                source
-            )
-            if (source.gamepad) {
-                ui_console.log(
-                    "source.gamepad", 
-                    source.gamepad
-                )
-
+            if(o_renderer.xr.getSession()){
+                // Check for and respond to any gamepad state changes.
+                for (let source of o_renderer.xr.getSession()?.inputSources) {
+                    ui_console.log(
+                        "source", 
+                        source
+                    )
+                    if (source.gamepad) {
+                        ui_console.log(
+                            "source.gamepad", 
+                            source.gamepad
+                        )
+        
+                    }
+                }
             }
-        }
         }
     }
     // if(n_frame_id % 20 == 0){
