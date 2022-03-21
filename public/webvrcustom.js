@@ -497,7 +497,35 @@ var n_time_summand = 1;
 // window.o_scene = o_scene
 var f_render = function (param_a, param_b) {
     if(n_frame_id % 20 == 0){
+        var time = param_a
+        var frame = param_b
+        if(frame){
 
+        
+        // try {
+            let session = frame.session;
+            for (let source of session.inputSources) {
+                if (source.gamepad) {
+
+                    //let pose = frame.getPose(source.gripSpace, refSpace);
+                    ui_console.log(
+                        "gamepad.buttons", 
+                        gamepad.buttons
+                    )
+                    ui_console.log(
+                        "gamepad.buttons.length", 
+                        gamepad.buttons.length
+                    )
+                    ui_console.log(
+                        "gamepad.axes", 
+                        gamepad.axes
+                    )
+                }
+              }
+            }
+        // } catch (error) {
+            
+        // }
         ui_console.log(
             "f_render param_a", 
             param_a
