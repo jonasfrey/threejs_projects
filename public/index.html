@@ -3,7 +3,7 @@
     <head>
         <link rel="stylesheet" href="app.css">
         <meta charset="utf-8" />
-        <title>Three.js Tutorials by Sean Bradley : https://sbcode.net/threejs/</title>
+        <title>threejs</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>
             body {
@@ -37,12 +37,13 @@
                 height: 50vw;
                 left: 0;
                 top: 0;
-                background: rgba(0,0,0,0.5);
+                /* background: rgba(0,0,0,0.5); */
+                background-color: black;
                 color: #29e228;
                 font-size:12px; 
                 overflow: scroll;
                 overflow-x:hidden; 
-                
+                padding: 1rem;
 
             }
         </style>
@@ -60,7 +61,8 @@
                     "imports": {
                         "three": "./node_modules/three/build/three.module.js",
                         "math_tau_module": "./node_modules/math_tau_module/math_tau_module.js",
-                        "o_hidstatusmap": "./node_modules/o_hidstatusmap/o_hidstatusmap_module.js"
+                        "o_hidstatusmap": "./node_modules/o_hidstatusmap/o_hidstatusmap_module.js",
+                        "html2canvas": "./node_modules/html2canvas/dist/html2canvas.esm.js"
                     }
                 }
             </script>

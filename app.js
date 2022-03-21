@@ -101,6 +101,7 @@ http_app.get("*", (req, res)=>{
     app.use('/node_modules/three', express.static(path.join(__dirname, './node_modules/three')))
     app.use('/node_modules/math_tau_module', express.static(path.join(__dirname, './node_modules/math_tau_module')))
     app.use('/node_modules/o_hidstatusmap', express.static(path.join(__dirname, './node_modules/o_hidstatusmap')))
+    app.use('/node_modules/html2canvas', express.static(path.join(__dirname, './node_modules/html2canvas')))
     // three modules such as PointerLockControls , need this /three route 
 
 

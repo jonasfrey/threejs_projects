@@ -12,6 +12,8 @@ import o_app_css_variables_static from "./app_css_variables/app_css.mjs";
 import o_hidstatusmap from "o_hidstatusmap";
 import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
 import { XRControllerModelFactory } from './node_modules/three/examples/jsm/webxr/XRControllerModelFactory.js';
+import html2canvas from 'html2canvas';
+import { TextureLoader } from 'three';
 
 
 
@@ -70,9 +72,9 @@ for ( let i = 0; i < 50; i ++ ) {
     object.rotation.z = Math.random() * 2 * Math.PI;
 
     object.userData.o_vec3_rotation_velocity = new THREE.Vector3(
-        Math.random() * 0.01 * Math.PI, 
-        Math.random() * 0.01 * Math.PI, 
-        Math.random() * 0.01 * Math.PI
+        Math.random() * 0.005 * Math.PI, 
+        Math.random() * 0.005 * Math.PI, 
+        Math.random() * 0.005 * Math.PI
     )
 
     object.scale.x = Math.random() + 0.5
@@ -134,7 +136,7 @@ var f_callbacks_done = function(){
 const o_default_basic_material = new THREE.MeshBasicMaterial(
     {
         color: new THREE.Color(o_app_css_variables_static.s_color_background_main_passive),
-        transparent: true,
+        // transparent: true,
         wireframe: true, 
         opacity: 0.5,
     }
@@ -155,8 +157,38 @@ const o_default_phong_material = new THREE.MeshPhongMaterial(
         flatShading: true,
     }
 )
+const o_default_texture_material = new THREE.MeshBasicMaterial( 
+    {   
+        map: o_texture_loader.load( "data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7" ), 
+        side: THREE.DoubleSide
+    }
+);
+
 ///
 
+
+///
+o_geometry = new THREE.PlaneGeometry(
+    1,
+    1, 
+)
+o_material = o_default_texture_material
+const o_mesh_ui_console = new THREE.Mesh(
+    o_geometry, 
+    o_material
+)
+o_scene.add(o_mesh_ui_console)
+o_mesh_ui_console.f_render_function = function(){
+
+    // keep position in front of camera
+    var self = this
+    self.position.copy(o_camera.position)
+    self.rotation.copy( o_camera.rotation );
+    self.updateMatrix();
+    self.translateZ( - 2 );
+
+}
+///
 
 ///
 n_callback_counter++
@@ -211,27 +243,50 @@ ui_console.log = function(s_name, object){
     this.innerText += s_name + "\n";
     this.innerText += "--------\n";
     this.innerText += JSON.stringify(object, null, 4)+"\n"
+    this.scrollTop = this.scrollHeight;
+    html2canvas(this).then(o_canvas => {
+        var o_texture = new THREE.CanvasTexture(o_canvas)
+        o_mesh_ui_console.material.map = o_texture
+        o_mesh_ui_console.material.needsUpdate = true;
+        // o_texture_loader.load((o_texture) => {
+        // })
+    });
 }
+
 ui_console.className = "ui_console"
 document.documentElement.appendChild(ui_console)
 
+ui_console.log(window.location)
+window.ui_console = ui_console
 
 var controller1 = o_renderer.xr.getController( 0 );
 
+// from https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API
+// available events
+// XRReferenceSpace: reset
+// XRSession: end
+// XRSession: inputsourceschange
+// XRSession: select
+// XRSession: selectend
+// XRSession: selectstart
+// XRSession: visibilitychange
+// XRSystem: devicechange
+
 o_scene.add( controller1 );
-controller1.addEventListener( 'connected', (e) => {
+controller1.addEventListener( 'connected', f_log_xr_event);
+controller1.addEventListener( 'select', f_log_xr_event);
+controller1.addEventListener( 'selectend', f_log_xr_event);
+controller1.addEventListener( 'selectstart', f_log_xr_event);
 
-	controller1.gamepad = e.data.gamepad
-    ui_console.log("controller1", controller1)
-    ui_console.log("controller1.gamepad", controller1.gamepad)
-
-});
 var controller2 = o_renderer.xr.getController( 1 );
-controller2.addEventListener( 'connected', (e) => {
+controller2.addEventListener( 'connected', f_log_xr_event);
+controller2.addEventListener( 'select', f_log_xr_event);
+controller2.addEventListener( 'selectend', f_log_xr_event);
+controller2.addEventListener( 'selectstart', f_log_xr_event);
 
-	controller2.gamepad = e.data.gamepad
-
-});
+var f_log_xr_event = function(event){
+    o_mesh_ui_console.log("event", event)
+}
 o_scene.add( controller2 );
 
 ui_console.innerText += JSON.stringify(ui_console, null, 4);
@@ -384,6 +439,9 @@ var f_render = function () {
                 object.rotation.y += object.userData.o_vec3_rotation_velocity.y
                 object.rotation.z += object.userData.o_vec3_rotation_velocity.z
             }
+            if(object.f_render_function){
+                object.f_render_function()
+            }
         }
 
     } );
@@ -454,8 +512,6 @@ var f_render = function () {
     }
 
     o_renderer.render(o_scene, o_camera);
-
-    o_mesh_right_hand.f_render_function()
 
 
     o_stats.end();
