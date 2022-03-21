@@ -118,6 +118,8 @@ function init() {
     controller2.addEventListener( 'selectend', onSelectEnd );
     scene.add( controller2 );
 
+
+
     const controllerModelFactory = new XRControllerModelFactory();
 
     controllerGrip1 = renderer.xr.getControllerGrip( 0 );

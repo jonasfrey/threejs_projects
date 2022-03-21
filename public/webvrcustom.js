@@ -306,6 +306,19 @@ o_scene.add( controllerGrip2 );
 ///
 
 ///
+o_renderer.xr.addEventListener( 'sessionstart', function ( event ) {
+
+    //
+    ui_console.log(
+        "renderer.xr.addEventListener( 'sessionstart', function(event)",
+        event
+    )
+
+} );
+
+///
+
+///
 var o_geometry = new THREE.CylinderGeometry( 
     0,
     0.5,
