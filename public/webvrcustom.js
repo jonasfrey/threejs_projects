@@ -284,11 +284,13 @@ o_scene.add( controller1 );
 // controller1.addEventListener( 'selectend', f_log_xr_event);
 // controller1.addEventListener( 'selectstart', f_log_xr_event);
 controller1.addEventListener( 'inputsourceschange', f_log_xr_event);
+o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
 
 // session.addEventListener( 'inputsourceschange', onInputSourcesChange );
 
 var controller2 = o_renderer.xr.getController( 1 );
 controller2.addEventListener( 'inputsourceschange', f_log_xr_event);
+o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
 
 // controller2.addEventListener( 'connected', f_log_xr_event);
 // controller2.addEventListener( 'select', f_log_xr_event);
