@@ -37,7 +37,8 @@ o_renderer.outputEncoding = THREE.sRGBEncoding;
 o_renderer.shadowMap.enabled = true;
 o_renderer.xr.enabled = true;
 document.body.appendChild(o_renderer.domElement);
-document.body.appendChild( VRButton.createButton( o_renderer ) );
+const o_vr_button = VRButton.createButton( o_renderer )
+document.body.appendChild( o_vr_button );
 
 
 ///
@@ -321,8 +322,8 @@ o_renderer.xr.addEventListener( 'sessionstart', function ( event ) {
 
 
     ui_console.log(
-        "VRButton", 
-        VRButton
+        "o_vr_button", 
+        o_vr_button
     )
 
 
