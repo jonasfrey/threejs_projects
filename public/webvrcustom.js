@@ -260,6 +260,8 @@ document.documentElement.appendChild(ui_console)
 ui_console.log(window.location)
 window.ui_console = ui_console
 
+
+
 var controller1 = o_renderer.xr.getController( 0 );
 
 // from https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API
@@ -332,7 +334,33 @@ o_renderer.xr.addEventListener( 'sessionstart', function ( event ) {
         o_renderer.xr
     )
 
+
+    ui_console.log(
+        "o_xr_session", 
+        o_xr_session
+    )
+
 } );
+
+const o_xr_session = renderer.xr.getSession();
+
+
+// renderer.xr.onInputSourcesChange = function( event ) {
+
+o_renderer.xr.addEventListener( 'onInputSourcesChange', function ( event ) {
+        
+    const inputSources = renderer.xr.getSession().inputSources;
+    
+    ui_console.log(
+        "onInputSourcesChange event", 
+        event
+    )
+
+    ui_console.log(
+        "onInputSourcesChange event", 
+        event
+    )
+});
 
 ///
 
