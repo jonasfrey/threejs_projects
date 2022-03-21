@@ -271,6 +271,9 @@ var controller1 = o_renderer.xr.getController( 0 );
 // XRSession: selectstart
 // XRSession: visibilitychange
 // XRSystem: devicechange
+var f_log_xr_event = function(event){
+    ui_console.log("event", event)
+}
 
 o_scene.add( controller1 );
 controller1.addEventListener( 'connected', f_log_xr_event);
@@ -284,9 +287,7 @@ controller2.addEventListener( 'select', f_log_xr_event);
 controller2.addEventListener( 'selectend', f_log_xr_event);
 controller2.addEventListener( 'selectstart', f_log_xr_event);
 
-var f_log_xr_event = function(event){
-    ui_console.log("event", event)
-}
+
 o_scene.add( controller2 );
 
 ui_console.innerText += JSON.stringify(ui_console, null, 4);
