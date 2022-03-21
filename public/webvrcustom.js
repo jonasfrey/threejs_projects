@@ -513,7 +513,7 @@ var n_time_summand = 1;
 
 var b_toggle = true 
 
-window.onclick = function(){ b_toggle = !b_toggle}
+// window.onclick = function(){ b_toggle = !b_toggle}
 // window.o_scene = o_scene
 var f_render = function (param_a, param_b) {
     if(b_toggle){
