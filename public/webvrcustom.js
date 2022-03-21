@@ -5,10 +5,13 @@
 import * as THREE from 'three'
 import Stats from './node_modules/three/examples/jsm/libs/stats.module.js'
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js';
+import { PointerLockControls } from './node_modules/three/examples/jsm/controls/PointerLockControls.js'
+
 import "math_tau_module";
 import o_app_css_variables_static from "./app_css_variables/app_css.mjs";
 import o_hidstatusmap from "o_hidstatusmap";
 import { VRButton } from './node_modules/three/examples/jsm/webxr/VRButton.js';
+import { XRControllerModelFactory } from './node_modules/three/examples/jsm/webxr/XRControllerModelFactory.js';
 
 
 
@@ -21,9 +24,6 @@ var o_camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.inner
 //important for VR
 o_camera.position.set( 0, 1.6, 3 );
 
-var o_orbit_controls = new OrbitControls( o_camera, document.body );
-o_orbit_controls.target.set( 0, 1.6, 0 );
-o_orbit_controls.update();
 
 
 var n_camera_movement_speed = 0.02;
@@ -69,7 +69,15 @@ for ( let i = 0; i < 50; i ++ ) {
     object.rotation.y = Math.random() * 2 * Math.PI;
     object.rotation.z = Math.random() * 2 * Math.PI;
 
-    object.scale.setScalar( Math.random() + 0.5 );
+    object.userData.o_vec3_rotation_velocity = new THREE.Vector3(
+        Math.random() * 0.01 * Math.PI, 
+        Math.random() * 0.01 * Math.PI, 
+        Math.random() * 0.01 * Math.PI
+    )
+
+    object.scale.x = Math.random() + 0.5
+    object.scale.y = Math.random() + 0.5
+    object.scale.z = Math.random() + 0.5
 
     object.castShadow = true;
     object.receiveShadow = true;
@@ -109,6 +117,7 @@ var f_callbacks_done = function(){
     // debugger
     o_scene.traverse( function( object ) {
         if ( object.isMesh ){
+
             if(object?.name?.includes("font")){
                 a_font_meshes.push(object)
             }
@@ -196,6 +205,51 @@ var o_vec3_o_raycaster_mesh_universe_point = new THREE.Vector3(0,0,0)
 
 
 ///
+var ui_console = document.createElement('pre')
+ui_console.log = function(s_name, object){
+    this.innerText += "--------\n";
+    this.innerText += s_name + "\n";
+    this.innerText += "--------\n";
+    this.innerText += JSON.stringify(object, null, 4)+"\n"
+}
+ui_console.className = "ui_console"
+document.documentElement.appendChild(ui_console)
+
+
+var controller1 = o_renderer.xr.getController( 0 );
+
+o_scene.add( controller1 );
+controller1.addEventListener( 'connected', (e) => {
+
+	controller1.gamepad = e.data.gamepad
+    ui_console.log("controller1", controller1)
+    ui_console.log("controller1.gamepad", controller1.gamepad)
+
+});
+var controller2 = o_renderer.xr.getController( 1 );
+controller2.addEventListener( 'connected', (e) => {
+
+	controller2.gamepad = e.data.gamepad
+
+});
+o_scene.add( controller2 );
+
+ui_console.innerText += JSON.stringify(ui_console, null, 4);
+
+
+const controllerModelFactory = new XRControllerModelFactory();
+
+var controllerGrip1 = o_renderer.xr.getControllerGrip( 0 );
+controllerGrip1.add( controllerModelFactory.createControllerModel( controllerGrip1 ) );
+o_scene.add( controllerGrip1 );
+
+var controllerGrip2 = o_renderer.xr.getControllerGrip( 1 );
+controllerGrip2.add( controllerModelFactory.createControllerModel( controllerGrip2 ) );
+o_scene.add( controllerGrip2 );
+
+///
+
+///
 var o_geometry = new THREE.CylinderGeometry( 
     0,
     0.5,
@@ -253,36 +307,36 @@ function onWindowResize() {
 
 
 ///
-// const o_pointerlock_controls = new PointerLockControls( 
-//     o_camera,
-//     document.body
-// );
+const o_pointerlock_controls = new PointerLockControls( 
+    o_camera,
+    document.body
+);
 
-// var o_button_pointer_lock = document.createElement("button")
-// o_button_pointer_lock.innerText = 'look around'
-// o_button_pointer_lock.style.position = 'absolute'
-// o_button_pointer_lock.style.bottom = '0%'
-// o_button_pointer_lock.style.right = '0%'
+var o_button_pointer_lock = document.createElement("button")
+o_button_pointer_lock.innerText = 'look around'
+o_button_pointer_lock.style.position = 'absolute'
+o_button_pointer_lock.style.bottom = '0%'
+o_button_pointer_lock.style.right = '0%'
 
-// document.body.appendChild(o_button_pointer_lock)
-// var f_lock_pointer = function () {
-//     o_pointerlock_controls.lock();
-// }
-// o_pointerlock_controls.addEventListener( 'lock', function () {
-//         // o_mesh_gun.visible = true
-//         o_hidstatusmap.o_mouse.x_normalized = 0.5        
-//         o_hidstatusmap.o_mouse.y_normalized = 0.5
-//     o_button_pointer_lock.innerText = 'MOUSEMOVE to look around,\n W A S D to move,\n E Q to rise/sink,\n ESC to unlock pointer'
-// } );
+document.body.appendChild(o_button_pointer_lock)
+var f_lock_pointer = function () {
+    o_pointerlock_controls.lock();
+}
+o_pointerlock_controls.addEventListener( 'lock', function () {
+        // o_mesh_gun.visible = true
+        o_hidstatusmap.o_mouse.x_normalized = 0.5        
+        o_hidstatusmap.o_mouse.y_normalized = 0.5
+    o_button_pointer_lock.innerText = 'MOUSEMOVE to look around,\n W A S D to move,\n E Q to rise/sink,\n ESC to unlock pointer'
+} );
 
-// o_pointerlock_controls.addEventListener( 'unlock', function () {
-//         // o_mesh_gun.visible = false
-//         o_hidstatusmap.o_mouse.x_normalized = 0.5        
-//         o_hidstatusmap.o_mouse.y_normalized = 0.5
-//         o_button_pointer_lock.innerText = 'look around'
-// } );
+o_pointerlock_controls.addEventListener( 'unlock', function () {
+        // o_mesh_gun.visible = false
+        o_hidstatusmap.o_mouse.x_normalized = 0.5        
+        o_hidstatusmap.o_mouse.y_normalized = 0.5
+        o_button_pointer_lock.innerText = 'look around'
+} );
 
-// o_button_pointer_lock.addEventListener("click", f_lock_pointer) 
+o_button_pointer_lock.addEventListener("click", f_lock_pointer) 
 ///
 
 
@@ -322,6 +376,17 @@ var f_render = function () {
     // debugger
     // points_for_line[1].copy(laser_vector)
 
+
+    o_scene.traverse( function( object ) {
+        if ( object.isMesh ){
+            if(object.userData.o_vec3_rotation_velocity){
+                object.rotation.x += object.userData.o_vec3_rotation_velocity.x
+                object.rotation.y += object.userData.o_vec3_rotation_velocity.y
+                object.rotation.z += object.userData.o_vec3_rotation_velocity.z
+            }
+        }
+
+    } );
 
     
     const intersects = raycaster.intersectObjects( o_scene.children );
@@ -369,22 +434,22 @@ var f_render = function () {
 
     // console.log(a_font_meshes)
 
-    // if(o_hidstatusmap["w"] == true){
-    //     o_pointerlock_controls.moveForward(n_camera_movement_speed)
-    // }
-    // if(o_hidstatusmap["s"] == true){
-    //     o_pointerlock_controls.moveForward(-n_camera_movement_speed)
-    // }
-    // if(o_hidstatusmap["a"] == true){
-    //     o_pointerlock_controls.moveRight(-n_camera_movement_speed)
-    // }
-    // if(o_hidstatusmap["d"] == true){
-    //     o_pointerlock_controls.moveRight(n_camera_movement_speed)
-    // }
-    if(o_hidstatusmap["e"] == true){
+    if(o_hidstatusmap.o_keyboard["w"] == true){
+        o_pointerlock_controls.moveForward(n_camera_movement_speed)
+    }
+    if(o_hidstatusmap.o_keyboard["s"] == true){
+        o_pointerlock_controls.moveForward(-n_camera_movement_speed)
+    }
+    if(o_hidstatusmap.o_keyboard["a"] == true){
+        o_pointerlock_controls.moveRight(-n_camera_movement_speed)
+    }
+    if(o_hidstatusmap.o_keyboard["d"] == true){
+        o_pointerlock_controls.moveRight(n_camera_movement_speed)
+    }
+    if(o_hidstatusmap.o_keyboard["e"] == true){
         o_camera.position.y += (n_camera_movement_speed)
     }
-    if(o_hidstatusmap["q"] == true){
+    if(o_hidstatusmap.o_keyboard["q"] == true){
         o_camera.position.y -= n_camera_movement_speed
     }
 
@@ -396,7 +461,7 @@ var f_render = function () {
     o_stats.end();
 
     n_time += n_time_summand
-    
+
     // requestAnimationFrame not working for VR 
     // n_frame_id = requestAnimationFrame(f_render);
     n_frame_id++
