@@ -495,8 +495,22 @@ var n_time = 0;
 // can be changed to -1 to, change from forwards to backwards
 var n_time_summand = 1;
 // window.o_scene = o_scene
-var f_render = function () {
+var f_render = function (param_a, param_b) {
+    if(n_frame_id % 20 == 0){
 
+        ui_console.log(
+            "f_render param_a", 
+            param_a
+        )
+        ui_console.log(
+            "f_render param_b", 
+            param_b
+        )
+        ui_console.log(
+            "o_renderer.xr.getSession()", 
+            o_renderer.xr.getSession()
+        )
+    }
     raycaster.setFromCamera( 
         {
             x: o_hidstatusmap.o_mouse.x_normalized * 2 - 1, 
