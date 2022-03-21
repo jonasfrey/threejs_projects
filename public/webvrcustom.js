@@ -285,7 +285,7 @@ controller2.addEventListener( 'selectend', f_log_xr_event);
 controller2.addEventListener( 'selectstart', f_log_xr_event);
 
 var f_log_xr_event = function(event){
-    o_mesh_ui_console.log("event", event)
+    ui_console.log("event", event)
 }
 o_scene.add( controller2 );
 
