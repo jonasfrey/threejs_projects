@@ -283,14 +283,14 @@ o_scene.add( controller1 );
 // controller1.addEventListener( 'select', f_log_xr_event);
 // controller1.addEventListener( 'selectend', f_log_xr_event);
 // controller1.addEventListener( 'selectstart', f_log_xr_event);
-controller1.addEventListener( 'inputsourceschange', f_log_xr_event);
-o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
+// controller1.addEventListener( 'inputsourceschange', f_log_xr_event);
+// o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
 
 // session.addEventListener( 'inputsourceschange', onInputSourcesChange );
 
 var controller2 = o_renderer.xr.getController( 1 );
-controller2.addEventListener( 'inputsourceschange', f_log_xr_event);
-o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
+// controller2.addEventListener( 'inputsourceschange', f_log_xr_event);
+// o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
 
 // controller2.addEventListener( 'connected', f_log_xr_event);
 // controller2.addEventListener( 'select', f_log_xr_event);
@@ -501,9 +501,28 @@ var n_frame_id = 0;
 var n_time = 0;
 // can be changed to -1 to, change from forwards to backwards
 var n_time_summand = 1;
+
+var b_toggle = false 
+
+window.onclick = function(){ b_toggle = !b_toggle}
 // window.o_scene = o_scene
 var f_render = function (param_a, param_b) {
+    if(b_toggle){
+        // Check for and respond to any gamepad state changes.
+        for (let source of o_renderer.xr.getSession()?.inputSources) {
+            ui_console.log(
+                "source", 
+                source
+            )
+            if (source.gamepad) {
+                ui_console.log(
+                    "source.gamepad", 
+                    source.gamepad
+                )
 
+            }
+        }
+    }
     // if(n_frame_id % 20 == 0){
     //     var time = param_a
     //     var frame = param_b
