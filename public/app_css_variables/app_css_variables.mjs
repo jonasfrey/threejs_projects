@@ -83,7 +83,7 @@ var f_o_extract_css_variables_from_string = function(s_string){
             
         }
 
-        console.log("asdf");
+        // console.log("asdf");
 
 
         return fetch(
