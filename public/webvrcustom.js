@@ -15,6 +15,15 @@ import { XRControllerModelFactory } from './node_modules/three/examples/jsm/webx
 import html2canvas from 'html2canvas';
 import { TextureLoader } from 'three';
 
+function objToString (obj) {
+    var str = '';
+    for (var p in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, p)) {
+            str += p + '::' + obj[p] + '\n';
+        }
+    }
+    return str;
+}
 
 
 var o_stats = new Stats();
@@ -30,6 +39,7 @@ o_camera.position.set( 0, 1.6, 3 );
 
 var n_camera_movement_speed = 0.02;
 var o_renderer = new THREE.WebGLRenderer({ antialias: true });
+window.o_renderer = o_renderer
 o_renderer.setPixelRatio( window.devicePixelRatio );
 o_renderer.setSize(window.innerWidth, window.innerHeight);
 
@@ -37,7 +47,8 @@ o_renderer.outputEncoding = THREE.sRGBEncoding;
 o_renderer.shadowMap.enabled = true;
 o_renderer.xr.enabled = true;
 document.body.appendChild(o_renderer.domElement);
-document.body.appendChild( VRButton.createButton( o_renderer ) );
+const o_vr_button = VRButton.createButton( o_renderer )
+document.body.appendChild( o_vr_button );
 
 
 ///
@@ -243,6 +254,7 @@ ui_console.log = function(s_name, object){
     this.innerText += s_name + "\n";
     this.innerText += "--------\n";
     this.innerText += JSON.stringify(object, null, 4)+"\n"
+
     this.scrollTop = this.scrollHeight;
     html2canvas(this).then(o_canvas => {
         var o_texture = new THREE.CanvasTexture(o_canvas)
@@ -258,6 +270,8 @@ document.documentElement.appendChild(ui_console)
 
 ui_console.log(window.location)
 window.ui_console = ui_console
+
+
 
 var controller1 = o_renderer.xr.getController( 0 );
 
@@ -276,16 +290,23 @@ var f_log_xr_event = function(event){
 }
 
 o_scene.add( controller1 );
-controller1.addEventListener( 'connected', f_log_xr_event);
-controller1.addEventListener( 'select', f_log_xr_event);
-controller1.addEventListener( 'selectend', f_log_xr_event);
-controller1.addEventListener( 'selectstart', f_log_xr_event);
+// controller1.addEventListener( 'connected', f_log_xr_event);
+// controller1.addEventListener( 'select', f_log_xr_event);
+// controller1.addEventListener( 'selectend', f_log_xr_event);
+// controller1.addEventListener( 'selectstart', f_log_xr_event);
+// controller1.addEventListener( 'inputsourceschange', f_log_xr_event);
+// o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
+
+// session.addEventListener( 'inputsourceschange', onInputSourcesChange );
 
 var controller2 = o_renderer.xr.getController( 1 );
-controller2.addEventListener( 'connected', f_log_xr_event);
-controller2.addEventListener( 'select', f_log_xr_event);
-controller2.addEventListener( 'selectend', f_log_xr_event);
-controller2.addEventListener( 'selectstart', f_log_xr_event);
+// controller2.addEventListener( 'inputsourceschange', f_log_xr_event);
+// o_renderer.xr.addEventListener( 'inputsourceschange', f_log_xr_event);
+
+// controller2.addEventListener( 'connected', f_log_xr_event);
+// controller2.addEventListener( 'select', f_log_xr_event);
+// controller2.addEventListener( 'selectend', f_log_xr_event);
+// controller2.addEventListener( 'selectstart', f_log_xr_event);
 
 
 o_scene.add( controller2 );
@@ -302,6 +323,75 @@ o_scene.add( controllerGrip1 );
 var controllerGrip2 = o_renderer.xr.getControllerGrip( 1 );
 controllerGrip2.add( controllerModelFactory.createControllerModel( controllerGrip2 ) );
 o_scene.add( controllerGrip2 );
+
+///
+
+///
+o_renderer.xr.addEventListener( 'sessionstart', function ( event ) {
+
+    //
+    ui_console.log(
+        "renderer.xr.addEventListener( 'sessionstart', function(event)",
+        event
+    )
+
+    ui_console.log(
+        "navigator.xr", 
+        navigator.xr
+    )
+
+
+    ui_console.log(
+        "o_renderer.xr", 
+        o_renderer.xr
+    )
+
+
+    ui_console.log(
+        "o_renderer.xr.getSession()", 
+        o_renderer.xr.getSession()
+    )
+
+
+
+
+} );
+
+const o_xr_session = o_renderer.xr.getSession();
+
+
+// renderer.xr.onInputSourcesChange = function( event ) {
+
+o_renderer.xr.addEventListener( 'onInputSourcesChange', function ( event ) {
+        
+    const inputSources = o_renderer.xr.getSession().inputSources;
+    
+    ui_console.log(
+        "onInputSourcesChange event", 
+        event
+    )
+
+    ui_console.log(
+        "onInputSourcesChange event", 
+        event
+    )
+});
+
+o_renderer.xr.addEventListener( 'inputSourcesChange', function ( event ) {
+        
+    const inputSources = o_renderer.xr.getSession().inputSources;
+    
+    ui_console.log(
+        "inputSourcesChange event", 
+        event
+    )
+
+    ui_console.log(
+        "inputSourcesChange event", 
+        event
+    )
+});
+
 
 ///
 
@@ -412,6 +502,7 @@ const o_line_raycaster_ray = new THREE.Line( o_geometry_raycaster_ray, o_materia
 o_scene.add( o_line_raycaster_ray ); 
 ///
 
+
 ///
 // the frame id should always stay positivte infinitly incrementing integer 
 var n_frame_id = 0;
@@ -419,9 +510,96 @@ var n_frame_id = 0;
 var n_time = 0;
 // can be changed to -1 to, change from forwards to backwards
 var n_time_summand = 1;
-// window.o_scene = o_scene
-var f_render = function () {
 
+var b_toggle = true 
+
+               ui_console.log("no session", "no session")
+               // window.onclick = function(){ b_toggle = !b_toggle}
+// window.o_scene = o_scene
+var f_render = function (param_a, param_b) {
+    if(b_toggle){
+        if(n_frame_id % 50 == 0){
+            if(window.o_renderer.xr.getSession()){
+                console.log(window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
+                ui_console.log(
+                    "window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0].pressed",
+                    window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0].pressed
+                    )
+
+                // console.log(o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
+                // ui_console.log(o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
+            }
+            // console.log(
+            //     window.o_renderer.xr.getSession() == o_renderer.xr.getSession()
+            // )
+            if(o_renderer.xr.getSession()){
+               ui_console.log("session", "session")
+            }else{
+               ui_console.log("no session", "no session")
+            }
+            // try {
+            //     console.log(
+            //         "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
+            //         o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+            //     )
+            //     ui_console.log(
+            //         "o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]", 
+            //         o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+            //     )
+            //     ui_console.log(
+            //         "click on the screen to stop logging on frame render", 
+            //         "click on the screen to stop logging on frame render"
+            //     )
+            // } catch (error) {
+                
+            // }
+
+        }
+    }
+    // console.log(navigator.xr.)
+    // if(n_frame_id % 20 == 0){
+    //     var time = param_a
+    //     var frame = param_b
+    //     if(frame){
+
+        
+    //     // try {
+    //         let session = frame.session;
+    //         for (let source of session.inputSources) {
+    //             if (source.gamepad) {
+
+    //                 //let pose = frame.getPose(source.gripSpace, refSpace);
+    //                 ui_console.log(
+    //                     "gamepad.buttons", 
+    //                     gamepad.buttons
+    //                 )
+    //                 ui_console.log(
+    //                     "gamepad.buttons.length", 
+    //                     gamepad.buttons.length
+    //                 )
+    //                 ui_console.log(
+    //                     "gamepad.axes", 
+    //                     gamepad.axes
+    //                 )
+    //             }
+    //           }
+    //         }
+    //     // } catch (error) {
+            
+    //     // }
+    //     ui_console.log(
+    //         "f_render param_a", 
+    //         param_a
+    //     )
+    //     ui_console.log(
+    //         "f_render param_b", 
+    //         param_b
+    //     )
+    //     ui_console.log(
+    //         "o_renderer.xr.getSession()", 
+    //         o_renderer.xr.getSession()
+    //     )
+    // }
     raycaster.setFromCamera( 
         {
             x: o_hidstatusmap.o_mouse.x_normalized * 2 - 1, 
