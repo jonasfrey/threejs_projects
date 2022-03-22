@@ -522,8 +522,8 @@ var f_render = function (param_a, param_b) {
             if(window.o_renderer.xr.getSession()){
                 console.log(window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
                 ui_console.log(
-                    "window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]",
-                    window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+                    "window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0].pressed",
+                    window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0].pressed
                     )
 
                 // console.log(o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
