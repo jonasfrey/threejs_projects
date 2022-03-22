@@ -513,15 +513,29 @@ var n_time_summand = 1;
 
 var b_toggle = true 
 
-// window.onclick = function(){ b_toggle = !b_toggle}
+               ui_console.log("no session", "no session")
+               // window.onclick = function(){ b_toggle = !b_toggle}
 // window.o_scene = o_scene
 var f_render = function (param_a, param_b) {
     if(b_toggle){
         if(n_frame_id % 50 == 0){
+            if(window.o_renderer.xr.getSession()){
+                console.log(window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
+                ui_console.log(
+                    "window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]",
+                    window.o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0]
+                    )
+
+                // console.log(o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
+                // ui_console.log(o_renderer.xr.getSession().inputSources[0].gamepad.buttons[0])
+            }
+            // console.log(
+            //     window.o_renderer.xr.getSession() == o_renderer.xr.getSession()
+            // )
             if(o_renderer.xr.getSession()){
-               ui_console.log("no session", "no session")
-            }else{
                ui_console.log("session", "session")
+            }else{
+               ui_console.log("no session", "no session")
             }
             // try {
             //     console.log(
