@@ -15,6 +15,7 @@ import { XRControllerModelFactory } from './node_modules/three/examples/jsm/webx
 import html2canvas from 'html2canvas';
 import { TextureLoader } from 'three';
 
+
 function objToString (obj) {
     var str = '';
     for (var p in obj) {

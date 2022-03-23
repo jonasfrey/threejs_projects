@@ -4,6 +4,17 @@
 import * as THREE from "three"
 import { MeshPhongMaterial } from "three";
 import { MeshBasicMaterial } from "three";
+import { RingGeometry } from "three";
+import { PlaneGeometry } from "three";
+import { CylinderGeometry } from "three";
+import { OctahedronGeometry } from "three";
+import { PointLight } from "three";
+import { Object3D } from "three";
+import { Light } from "three";
+import { TorusKnotGeometry } from "three";
+import { CircleGeometry } from "three";
+import { TubeGeometry } from "three";
+import { ConeGeometry } from "three";
 import { Mesh } from "three";
 import { BoxGeometry } from "three";
 import { Group } from "three";
@@ -16,170 +27,173 @@ import { SphereGeometry } from "three";
 
 // wie / how / style 
 
-window.o_was_what_data = {
-    o_house: {
-        s_name: "kamehouse", 
-        o_location: {
-            n_x : 1, 
-            n_y : 1, 
-            n_z : 1, 
-        },
-        o_size: {
-            n_x: 0.5, 
-            n_y: 0.5, 
-            n_z: 1
-        }
-    }, 
-    a_o_room: [
-        {
-            s_name: "schlafzimmer", 
-            o_location: {
-                n_x : 0, 
-                n_y : 0, 
-                n_z : 0, 
-            }, 
-            o_size: {
-                n_x: 0.5, 
-                n_y: 1, 
-                n_z: 0.5 
-            }
-        },
-        {
-            s_name: "kueche", 
-            o_location: {
-                n_x : 0.5, 
-                n_y : 0, 
-                n_z : 0, 
-            }, 
-            o_size: {
-                n_x: 0.5, 
-                n_y: 1, 
-                n_z: 0.5
-            }
-        },
-        {
-            s_name: "bad", 
-            o_location: {
-                n_x : 0.5, 
-                n_y : 0, 
-                n_z : 0.5, 
-            }, 
-            o_size: {
-                n_x: 0.5, 
-                n_y: 1, 
-                n_z: 0.5
-            }
-        }
-    ], 
-    a_o_furniture: [
-        [
-            {
-                s_name: "bed", 
-                o_location: {
-                    n_x : 0.5, 
-                    n_y : 0, 
-                    n_z : 0.5, 
-                }, 
-                o_size: {
-                    n_x: 0.2, 
-                    n_y: 0.2, 
-                    n_z: 0.2
-                }
-            }, 
-            {
-                s_name: "table", 
-                o_location: {
-                    n_x : 0.25, 
-                    n_y : 0, 
-                    n_z : 0.25, 
-                }, 
-                o_size: {
-                    n_x: 0.2, 
-                    n_y: 0.3, 
-                    n_z: 0.2
-                }
-            }
-        ]
-    ], 
-    o_vec3_1 : new THREE.Vector3(0.1,0.1,0.1),
-    o_vec3_2 : new THREE.Vector3(0.2,0.2,0.2),
-    o_vec3_3 : new THREE.Vector3(0.3,0.3,0.3),
-    o_vec3_4 : new THREE.Vector3(0.4,0.4,0.4),
+function getDescendantProp(obj, desc) {
+    var arr = desc.split(".");
+    while(arr.length && (obj = obj[arr.shift()]));
+    return obj;
 }
 
-var wo_where_layout = {
-    t: BoxGeometry,
-    name: 'house',
-    c: [
-        {
-            t:BoxGeometry,
-            name: "room",
-            "for": "o_room in a_o_room",
-            ":position":"new THREE.Vector3(o_room.o_location.nx,o_room.o_location.ny,o_room.o_location.nz)",
-            ":scale":"new THREE.Vector3(o_room.o_size.nx,o_room.o_size.ny,o_room.o_size.nz)",
-            c:[
-                {
-                    name: "o_furniture in a_o_furniture",
-                    t: BoxGeometry,
-                    name: "furniture",
-                    c: [
-                        {
-                            t: SphereGeometry, 
-                            name: 'earth',
-                        }
-                    ]
-                }
-            ]
-        
-        }
-    ]
+window.o_was_what_data = {
+
+    "box": {
+        "box": BoxGeometry,
+        "color":  new THREE.Color(0xf0f0f0), 
+        "location": new THREE.Vector3(1,1,1)
+    },
+    "cone": {
+        "cone": ConeGeometry,
+        "color":  new THREE.Color(0x0f0f0f), 
+        "location": new THREE.Vector3(2,1,1)
+    },
+    "ring": {
+        "ring": RingGeometry,
+        "color":  new THREE.Color(0xef00fe), 
+        "location": new THREE.Vector3(3,1,1)
+    },
+    "tube": {
+        "tube": TubeGeometry, 
+        "color":  new THREE.Color(0xee00ff), 
+        "location": new THREE.Vector3(1,2,2)
+    },
+    "plane": {
+        "plane": PlaneGeometry,
+        "color":  new THREE.Color(0x0ef0ef), 
+        "location": new THREE.Vector3(2,2,2)
+    },
+    "circle": {
+        "circle": CircleGeometry,
+        "color":  new THREE.Color(0xfeedee), 
+        "location": new THREE.Vector3(3,2,2)
+    },
+    "cylinder": {
+        "cylinder": CylinderGeometry,
+        "color":  new THREE.Color(0x1f2f3f), 
+        "location": new THREE.Vector3(1,3,3)
+    },
+    "torus": {
+        "torus": TorusKnotGeometry,
+        "color":  new THREE.Color(0xf1f2f3), 
+        "location": new THREE.Vector3(2,3,3)
+    },
+    "octahedron": {
+        "octahedron": OctahedronGeometry,
+        "color":  new THREE.Color(0xaffaff), 
+        "location": new THREE.Vector3(3,3,3)
+    },
+    "light":{
+        "intensity": 1,
+    }
+
 }
+
+
 
 
 var wo_where_layout_static_data = {
-    t: BoxGeometry,
-    name: 'house',
-    // ":position": "new THREE.Vector3(0.1,0.1,0.1)",
-    ":position": "o_vec3_1",
+    t: Group, 
     c: [
         {
-            t:BoxGeometry,
-            // ":posithttps://localhost:3001/#waswowieion": "new THREE.Vector3(0.2,0.2,0.2)",
-            ":position": "o_vec3_2",
-            name: "room",
-            "for": "o_room in a_o_room",
-            c:[
-                {
-                    name: "o_furniture in a_o_furniture",
-                    t: BoxGeometry,
-                    // ":position": "new THREE.Vector3(0.3,0.3,0.3)",
-                    ":position": "o_vec3_3",
-                    name: "furniture",
-                    c: [
-                        {
-                            // ":position": "new THREE.Vector3(0.4,0.4,0.4)",
-                            ":position": "o_vec3_4",
-                            t: SphereGeometry, 
-                            name: 'earth',
-                        }
-                    ]
-                }
-            ]
-        
-        }
-    ]
+            "t": Mesh,
+            "geometry":{ "t": BoxGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "box.color"
+            }, 
+            ":position": "box.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": ConeGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "cone.color"
+            }, 
+            ":position": "cone.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": RingGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "ring.color"
+            }, 
+            ":position": "ring.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": TubeGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "tube.color"
+            } , 
+            ":position": "tube.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": PlaneGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "plane.color"
+            }, 
+            ":position": "plane.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": CircleGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "circle.color"
+            }, 
+            ":position": "circle.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": CylinderGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "cylinder.color"
+            }, 
+            ":position": "cylinder.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": TorusKnotGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "torus.color"
+            }, 
+            ":position": "torus.location"
+        },
+        {
+            "t": Mesh,
+            "geometry":{ "t": OctahedronGeometry},
+            "material": {
+                t: MeshPhongMaterial, 
+                ":color": "octahedron.color"
+            }, 
+            ":position": "octahedron.location"
+        },
+
+    ],
+    
+    "light": {
+        "t": PointLight, 
+        ":position": "new THREE.Vector3(10,10,10)", 
+        "-intensity": "light.intensity",
+        "intensity": "10"
+    }
+    
+
 }
 //converting data to three
 var f_recursive_convert_object = function(o_object){
-    var o_threejs_instance_geometry = new o_object.t()
-    var o_threejs_instance_material = new MeshBasicMaterial({color:Math.random() * 0xffffff})
-    var o_threejs_instance_mesh = new Mesh(o_threejs_instance_geometry, o_threejs_instance_material)
+    var o_threejs_instance= new o_object.t()
 
-    o_threejs_instance_mesh.c = []
+    o_threejs_instance.c = []
     for(var s_prop_o_object_c in o_object.c){
         var o_object_child = f_recursive_convert_object(o_object.c[s_prop_o_object_c])
-        o_threejs_instance_mesh.c.push(o_object_child)
-        o_threejs_instance_mesh.add(o_object_child)
+        o_threejs_instance.c.push(o_object_child)
+        o_threejs_instance.add(o_object_child)
     }
 
     for(var s_prop_o_object in o_object){
@@ -187,6 +201,7 @@ var f_recursive_convert_object = function(o_object){
             continue;
         }
         var value = o_object[s_prop_o_object]
+
         if(s_prop_o_object.indexOf(":") == 0){
             var s_scope_variables_initialization_lines = ''
             for(var s_prop_o_was_what_data in o_was_what_data){
@@ -201,21 +216,49 @@ var f_recursive_convert_object = function(o_object){
                 o_was_what_data, 
                 THREE
             )
-            console.log(evaluated_value)
-            // o_threejs_instance_mesh[s_prop_o_object.substring(1)].set(evaluated_value); 
-            // o_threejs_instance_mesh[s_prop_o_object.substring(1)] = (evaluated_value); 
-            // o_threejs_instance_mesh[s_prop_o_object.substring(1)].copy(evaluated_value); 
-            // o_threejs_instance_mesh[s_prop_o_object.substring(1)].x = Math.random()*0.5
-            // o_threejs_instance_mesh[s_prop_o_object.substring(1)].y = Math.random()*0.5
-            // o_threejs_instance_mesh[s_prop_o_object.substring(1)].z = Math.random()*0.5
+            // console.log(evaluated_value)
+            // o_threejs_instance[s_prop_o_object.substring(1)].set(evaluated_value); 
+            
+            Object.defineProperty(o_threejs_instance, s_prop_o_object.substring(1), {
+                writable: true
+              });
+              
+            o_threejs_instance[s_prop_o_object.substring(1)] = (evaluated_value); 
+            // Object.assign(o_threejs_instance[s_prop_o_object.substring(1)], evaluated_value)
+            // o_threejs_instance[s_prop_o_object.substring(1)].copy(evaluated_value); 
+            // o_threejs_instance[s_prop_o_object.substring(1)].x = Math.random()*0.5
+            // o_threejs_instance[s_prop_o_object.substring(1)].y = Math.random()*0.5
+            // o_threejs_instance[s_prop_o_object.substring(1)].z = Math.random()*0.5
 
-        }else{
-            o_threejs_instance_mesh[s_prop_o_object] = value; 
         }
+        if(s_prop_o_object.indexOf(":") != 0){
+            // debugger
+            if(typeof value === "object"){
+                var o_evaluated  = f_recursive_convert_object(value);
+                o_threejs_instance[s_prop_o_object] = o_evaluated
+            }else{
+                o_threejs_instance[s_prop_o_object] = value; 
+            }
+        }
+        // if(s_prop_o_object.indexOf("-") == 0){
+        //     o_threejs_instance[s_prop_o_object] = getDescendantProp(o_was_what_data, )
+        // }
+
         
     }    
-    o_object = o_threejs_instance_mesh
-    return o_object
+    
+    // o_threejs_instance.proxy = new Proxy(o_object, {
+    //     set: function (target, key, value) {
+    //         console.log(`${key} set to ${value}`);
+    //         target[key] = value;
+    //         return true;
+    //     }
+    //   });
+
+    // o_object.uuid = o_threejs_instance.uuid
+    return o_threejs_instance
+
+
 }
 
 window.wo_where_layout = f_recursive_convert_object(wo_where_layout_static_data);
@@ -230,7 +273,13 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 scene.add( window.wo_where_layout );
+for(var key in window.wo_where_layout){
+    var val = window.wo_where_layout[key]; 
+    if(typeof val === "object"){
+        scene.add(val)
 
+    }
+}
 // const geometry = new THREE.BoxGeometry();
 // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 // const cube = new THREE.Mesh( geometry, material );
@@ -239,15 +288,26 @@ scene.add( window.wo_where_layout );
 
 
 
-camera.position.z = 5;
+camera.position.z = 15;
 
-function animate() {
+var n_frame_id = 0
+var f_render_function= function() {
     
-    requestAnimationFrame( animate );
+    // requestAnimationFrame( animate );
+
+    scene.traverse( function( object ) {
+        
+        if(object.f_render_function){
+            object.f_render_function(n_frame_id)
+        }
+    
+    } );
 
 
     renderer.render( scene, camera );
-
+    n_frame_id++
 };
 
-animate();
+renderer.setAnimationLoop(f_render_function);
+
+// f_render_function();
