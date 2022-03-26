@@ -17,10 +17,8 @@
 
     class O_proxy{
         constructor(original){
-            var tmp  = original
-            original  = new Proxy(original, this)
-            this.a_o_other = []
-            return original
+            return new Proxy(this, this)
+
         }
 
         set(o_object, s_prop, value){
@@ -47,6 +45,7 @@
     }
 
     someObject_a = new O_proxy(someObject_a)
+
     someObject_b = new O_proxy(someObject_b)
 
     var o_input = document.createElement("input")
